@@ -7,8 +7,19 @@ pip instal pika
 pip install sql_alchemy
 pip install flask
 
-python receive.py
-python send.py
+
+# make data base by model
+
+---
+
+  * python
+  * from model import *
+  * db.create_all()
+
+
+
+python consumer.py
+python publisher.py
 
 
 # Intro

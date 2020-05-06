@@ -15,38 +15,46 @@ db = SQLAlchemy(app)
 class Title(db.Model):
     __tableName__ = "title"
     id = db.Column(db.Integer, primary_key=True)
-    Title = db.Column(db.String(120), nullable=False)
+    title = db.Column(db.String(120), nullable=False)
     date_start_text = db.Column(db.String(120),nullable=False)
     state = db.Column(db.Integer,nullable=False)
 
+    @staticmethod
     def Insert(_Title,_date_start_text,_state):
         _Title = _Title.strip()
-        if Title.query.filter_by(Title=_Title).count()==0:
-            new_title = Title(Title= _Title,date_start_text=_date_start_text,state=_state)
+        print(_Title)
+        print(Title.query.filter_by(title=_Title).count())
+        if Title.query.filter_by(title=_Title).count()==0:
+            new_title = Title(title= _Title,date_start_text=_date_start_text,state=_state)
             try:
                 db.session.add(new_title)
                 db.session.commit()
                 print('add Title')
             except:
                 return 'error'
-        else:
-            Title_info = Title.query.filter_by(Title=_Title).first()
-            id = Title_info.id
-            print('title id is '+ str(id))
+        # else:
+        #     Title_info = Title.query.filter_by(title=_Title).first()
+        #     title_id = Title_info.id
+        #     print('title id is '+ str(title_id))
 
 
 
 class Tournament(db.Model):
     __tableName__ = "tournamet"
     id = db.Column(db.Integer, primary_key=True)
-    Tournament = db.Column(db.String(120), nullable=False)
+    tournament = db.Column(db.String(120), nullable=False)
+    title = db.relationship('Title', backref='tournamet', lazy=True)
+    title_id = db.Column(db.Integer, db.ForeignKey('title.id'))
 
+    @staticmethod
     def Insert(_Tournament):
-        new_tournaments = Tournament(Tournament=_Tournament)
+
+
+
+        new_tournaments = Tournament(tournament=_Tournament,title_id=1)
         # try:
         db.session.add(new_tournaments)
         res = db.session.commit()
-        print(res.primary_key)
         print('add Tournament')
         #     return 200
         # except:
@@ -61,6 +69,7 @@ class Team(db.Model):
     Team = db.Column(db.String(120), nullable=False)
     Team_id = db.Column(db.Integer,nullable=False)
 
+    @staticmethod
     def Insert(_Team_id,_Team):
         new_team = Team(Team=_Team,Team_id=_Team_id)
         # try:
