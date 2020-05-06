@@ -22,6 +22,13 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
+    
+    publisher:
+    # Identical to the consumer.
+        build: publisher
+        # environment: AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+        networks:
+          - network
 
     # Run this container on a private network for this application.
     # This is necessary for magic Docker DNS to work: other containers
