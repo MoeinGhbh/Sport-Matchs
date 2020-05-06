@@ -29,31 +29,3 @@ connection.close()
 
 
 
-
-
-
-
-# #!/usr/bin/env python
-# import pika
-
-
-# connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-# channel = connection.channel()
-
-# channel.queue_declare(queue='eSortQueue')
-
-# import json
-
-# for i in range(1,5):
-#     FileName = 'Messages/message{}.json'.format(i)
-
-#     with open(FileName) as f:
-#         data = json.load(f)
-
-#     channel.basic_publish(exchange='',
-#                       routing_key='eSortQueue',
-#                       body=json.dumps(data))
-
-# print(" [x] Sent 'eSport Publisher send messager to server'")
-
-# connection.close()
