@@ -9,7 +9,7 @@ channel = connection.channel()
 channel.queue_declare(queue='eSportQueue')
 
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
+    # print(" [x] Received %r" % body)
     output_json = json.loads(body)
     
     # add title
