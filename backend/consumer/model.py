@@ -22,8 +22,8 @@ class Title(db.Model):
     def Insert(_Title,_state):
         _Title = _Title.strip()
         _Title = _Title.lower()
-        print(_Title)
-        print(Title.query.filter_by(title=_Title).count())
+        # print(_Title)
+        # print(Title.query.filter_by(title=_Title).count())
         if Title.query.filter_by(title=_Title).count()==0:
             new_title = Title(title= _Title,state=_state)
             try:
@@ -48,8 +48,8 @@ class Tournament(db.Model):
         _Tournament=_Tournament.lower()
         _title=_title.strip()
         _title=_title.lower()
-        print('count of tournemants')
-        print(Tournament.query.filter_by(tournament_name=_Tournament).count())
+        # print('count of tournemants')
+        # print(Tournament.query.filter_by(tournament_name=_Tournament).count())
         if (Tournament.query.filter_by(tournament_name=_Tournament).count()==0):
             Title_id = Title.query.filter_by(title=_title).first().id
             new_tournaments = Tournament(tournament_name=_Tournament,title_id=Title_id,date_start_text=_date_start_text)
@@ -103,11 +103,30 @@ class Matches(db.Model):
 class Scores(db.Model):
     __tableName__ = "scores"
     id = db.Column(db.Integer, primary_key=True)
-    team_id_1 = db.Column(db.Integer, db.ForeignKey('matches.team1'), unique=False, nullable=True)
-    team_id_2 = db.Column(db.Integer, db.ForeignKey('matches.team2'), unique=False, nullable=True)
-    matche_id = db.Column(db.Integer, db.ForeignKey('matches.tournament_id'), unique=False, nullable=False)
-    winner = db.Column(db.String(120), nullable=True)
-    Score = db.Column(db.String(120), nullable=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('matches.team1'),db.ForeignKey('matches.team2'), unique=False, nullable=True)
+    # team_id_2 = db.Column(db.Integer, db.ForeignKey('matches.team2'), unique=False, nullable=True)
+    matche_id = db.Column(db.Integer, db.ForeignKey('matches.id'), unique=False, nullable=False)
+    winner = db.Column(db.Integer, nullable=True)
+    Score = db.Column(db.Integer, nullable=True)
+
+    @staticmethod
+    def Insert(_Tournament, _Team,_Score,_winner,_Team1,_Team2):
+        _Tournament = _Tournament.strip()
+        _Tournament=_Tournament.lower()
+        _Tournament_id =  Tournament.query.filter_by(tournament_name=_Tournament).first().id
+        
+        _Matched_id = Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).first().id
+
+
+
+        if (Scores.query.filter_by(matche_id=_Matched_id).filter_by(team_id=_Team).count()==0):
+            new_score = Scores(team_id=_Team,matche_id=_Matched_id,Score=_Score,winner=_winner)
+            try:
+                db.session.add(new_score)
+                db.session.commit()
+                print('add Score')
+            except:
+                return 'error'
 
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pika
-from model import Title, Team, Tournament , Matches
+from model import Title, Team, Tournament , Matches, Scores
 import json
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
@@ -41,6 +41,27 @@ def callback(ch, method, properties, body):
     print(output_json["data"]["scores"][0]["team"])
     print(output_json["data"]["scores"][1]["team"])
     Matches.Insert(trnmt,output_json["data"]["scores"][0]["team"],output_json["data"]["scores"][1]["team"])
+
+
+    # add Score
+    print('add Score')
+    # Insert(_Tournament, _Team,_Score,_winner,_Team1,_Team2)
+    Scores.Insert(
+        trnmt,
+        output_json["data"]["scores"][0]["team"],
+        output_json["data"]["scores"][0]["score"],
+        output_json["data"]["scores"][0]["winner"],
+        output_json["data"]["scores"][0]["team"],
+        output_json["data"]["scores"][1]["team"]
+        )
+    Scores.Insert(
+        trnmt,
+        output_json["data"]["scores"][1]["team"],
+        output_json["data"]["scores"][1]["score"],
+        output_json["data"]["scores"][1]["winner"],
+        output_json["data"]["scores"][0]["team"],
+        output_json["data"]["scores"][1]["team"]
+        )
 
 
 channel.basic_consume(queue='eSportQueue', on_message_callback=callback, auto_ack=True)
