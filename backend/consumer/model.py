@@ -21,6 +21,7 @@ class Title(db.Model):
     @staticmethod
     def Insert(_Title,_state):
         _Title = _Title.strip()
+        _Title = _Title.lower()
         print(_Title)
         print(Title.query.filter_by(title=_Title).count())
         if Title.query.filter_by(title=_Title).count()==0:
@@ -33,37 +34,42 @@ class Title(db.Model):
                 return 'error'
 
 class Tournament(db.Model):
-    __tableName__ = "tournamet"
+    __tableName__ = "tournament"
     id = db.Column(db.Integer, primary_key=True)
-    tournament = db.Column(db.String(120), nullable=False)
+    tournament_name = db.Column(db.String(120), nullable=False)
     date_start_text = db.Column(db.String(120),nullable=False)
     # ForeignKey
-    title = db.relationship('Title', backref='tournamet', lazy=True)
+    title = db.relationship('Title', backref='tournament', lazy=True)
     title_id = db.Column(db.Integer, db.ForeignKey('title.id'))
 
     @staticmethod
     def Insert(_Tournament,_title,_date_start_text):
         _Tournament=_Tournament.strip()
+        _Tournament=_Tournament.lower()
         _title=_title.strip()
-        if (Tournament.query.filter_by(Tournament=_Tournament).count==0):
+        _title=_title.lower()
+        print('count of tournemants')
+        print(Tournament.query.filter_by(tournament_name=_Tournament).count())
+        if (Tournament.query.filter_by(tournament_name=_Tournament).count()==0):
             Title_id = Title.query.filter_by(title=_title).first().id
-            new_tournaments = Tournament(tournament=_Tournament,title_id=Title_id,date_start_text=_date_start_text)
+            new_tournaments = Tournament(tournament_name=_Tournament,title_id=Title_id,date_start_text=_date_start_text)
             try:
                 db.session.add(new_tournaments)
                 res = db.session.commit()
                 print('add Tournament')
             except:
                 return 'error'
+        else:
+            print('tournament is exist')
 
 class Team(db.Model):
     __tableName__ = "team"
     id = db.Column(db.Integer, primary_key=True)
     Team = db.Column(db.String(120), nullable=False)
-    # Team_id = db.Column(db.Integer,nullable=False)
 
     @staticmethod
     def Insert(_Team_id,_Team):
-        if (Team.query.filter_by(id=_Team_id).count==0):
+        if (Team.query.filter_by(id=_Team_id).count()==0):
             new_team = Team(id=_Team_id,Team=_Team)
             try:
                 db.session.add(new_team)
@@ -76,44 +82,32 @@ class Matches(db.Model):
     __tableName__ = "matches"
     id = db.Column(db.Integer, primary_key=True)
      # ForeignKey
-    tournament = db.relationship('Tournament', backref='tournamet', lazy=True)
-    Tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.id'))
-     # ForeignKey
-    Team1_id = db.Column(db.Integer, db.ForeignKey('team.id'))
-    Team2_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+    team1 = db.Column(db.Integer, db.ForeignKey('team.id'), unique=False, nullable=False)
+    team2 =      db.Column(db.Integer, db.ForeignKey('team.id'), unique=False, nullable=False)
+    tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.id'), unique=False, nullable=False)
 
-    Team1 = db.relationship('Team', foreign_keys='team',backref='team1_id', lazy=True)
-    Team2 = db.relationship('Team', foreign_keys='team',backref='team2_id', lazy=True)
+    @staticmethod
+    def Insert(_Tournament,_Team1,_Team2):
+        _Tournament = _Tournament.strip()
+        _Tournament=_Tournament.lower()
+        _Tournament_id =  Tournament.query.filter_by(tournament_name=_Tournament).first().id
+        if (Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).count()==0):
+            new_matches = Matches(team1=_Team1,team2=_Team2,tournament_id=_Tournament_id)
+            try:
+                db.session.add(new_matches)
+                db.session.commit()
+                print('add Matches')
+            except:
+                return 'error'
 
-# class Company(Base):
-#     __tablename__ = 'company'
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String(50), nullable=False)
-
-# class Stakeholder(Base):
-#     __tablename__ = 'stakeholder'
-#     id = Column(Integer, primary_key=True)
-
-#     company_id = Column(Integer, ForeignKey('company.id'), nullable=False)
-#     stakeholder_id = Column(Integer, ForeignKey('company.id'), nullable=False)
-#     company = relationship("Company", foreign_keys=[company_id])
-#     stakeholder = relationship("Company", foreign_keys=[stakeholder_id])
-
-
-
-
-
-
-
-
-
-
-
-# class Scores(db.Model):
-#     __tableName__ = "scores"
-#     team_id = db.Column(db.Integer, primary_key=True)
-#     winner = db.Column(db.String(120), nullable=False)
-#     Score = db.Column(db.String(120), nullable=False)
+class Scores(db.Model):
+    __tableName__ = "scores"
+    id = db.Column(db.Integer, primary_key=True)
+    team_id_1 = db.Column(db.Integer, db.ForeignKey('matches.team1'), unique=False, nullable=True)
+    team_id_2 = db.Column(db.Integer, db.ForeignKey('matches.team2'), unique=False, nullable=True)
+    matche_id = db.Column(db.Integer, db.ForeignKey('matches.tournament_id'), unique=False, nullable=False)
+    winner = db.Column(db.String(120), nullable=True)
+    Score = db.Column(db.String(120), nullable=True)
 
 
 
