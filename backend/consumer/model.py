@@ -143,11 +143,11 @@ class report():
                                 team.Team , \
                                 scores.winner,\
                                 scores.Score \
-                        FROM matches \
-                        inner join team on matches.team1 = team.id OR matches.team2=team.id \
-                        inner join scores on (matches.team1=scores.team_id or matches.team2=scores.team_id) \
-                        inner join tournament on tournament.id = matches.tournament_id \
-                        inner join title on title.id=tournament.id" 
+                        FROM title \
+                                inner join tournament on title.id=tournament.title_id   \
+                                inner join matches on matches.tournament_id=tournament.id \
+                                inner join scores on (scores.team_id=matches.team1 or scores.team_id=matches.team2) and scores.matche_id=matches.id \
+                                inner join team on team.id = scores.team_id" 
 
             sql = text(SQLCommand)
             cursor = db.engine.execute(sql)
