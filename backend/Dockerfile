@@ -4,6 +4,12 @@ WORKDIR /code
 # ENV FLASK_APP=main.py
 # ENV FLASK_RUN_HOST 0.0.0.0
 
+# ENV PYTHONPATH "/usr/src/app/:/usr/src/app/modules/"
+
+ENV PATH=$PATH:/consumer
+ENV PYTHONPATH /consumer
+
+
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 

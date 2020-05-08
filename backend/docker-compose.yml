@@ -6,6 +6,14 @@ version: '3'  # requires Docker Compose 1.13 or later
 # This section describes the various containers (services).
 services:
   
+  web:
+    build: Dockerfile
+    ports:
+       - "5000:5000"
+    volumes:
+        - .:/code
+    command: python3 app.py --host=0.0.0.0 --port=5000
+    
   rabbitmq:
     # There is a prebuilt RabbitMQ image; see
     # https://hub.docker.com/_/rabbitmq/ for details.
@@ -56,13 +64,7 @@ services:
     networks:
       - network
 
-  web:
-    build: .
-    ports:
-       - "5000:5000"
-    volumes:
-        - .:/code
-    command: python3 app.py --host=0.0.0.0 --port=5000
+
 
 networks:
   # Declare our private network.  We must declare one for the magic
