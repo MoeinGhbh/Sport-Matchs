@@ -16,7 +16,7 @@ def index():
 @app.route("/api/v1.0/getData", methods=["GET", "POST"])
 def getData():
     res = report.report()
-    return res
+    return jsonify(res)
 
 @app.errorhandler(404)
 def page_not_found(e):

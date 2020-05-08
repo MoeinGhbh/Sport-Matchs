@@ -152,10 +152,9 @@ class report():
             sql = text(SQLCommand)
             cursor = db.engine.execute(sql)
 
-            data = cursor.fetchall()
 
             myText =''
-            for idx, val in enumerate(data):
+            for idx, val in enumerate(cursor):
                 if myText !='':
                     myText=myText+","
                 txt1 = " \"{indx}\": ".format(indx=idx+1)
@@ -169,8 +168,7 @@ class report():
                 myText+=txt
 
             
-            print(myText)
             myText="{"+myText+"}"
-            return json.dumps(myText)
+            return json.loads(myText)
             
            
