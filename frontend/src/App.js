@@ -8,22 +8,24 @@ class App extends Component{
   constructor(){
     super()
     this.state={
-      data:''
+      mydata:[]
     }
   }
 
   componentDidMount() {
     axios.post('http://127.0.0.1:5000/api/v1.0/getData')
+  
         .then(res => {
             if (res.status == 200) {
-                this.setState({data: res.data})
+                this.setState({mydata: res.data})
             }
         })
       
     setInterval(() => axios.post('http://127.0.0.1:5000/api/v1.0/getData')
             .then(res => {
                 if (res.status == 200) {
-                    this.setState({data: res.data})
+                    this.setState({mydata: res.data})
+                    console.log(this.state.mydata)
                 }
             }).catch(r => {
                alert('connection is not available')
@@ -32,29 +34,30 @@ class App extends Component{
 }
 
   render(){
-    const {data} = this.state;
-    const myObjStr = JSON.parse(data);
+    console.log(this.state.mydata,'this.state.mydata')
+    // const myObjStr = JSON.stringify(this.state.mydata)
+    // console.log(myObjStr,'myobj')
 
-    console.log(data)
-    console.log(myObjStr)
+    const arr = []
+    Object.keys(this.state.mydata).forEach(key => arr.push({name: key, value: this.state.mydata[key]}))
+
     return(
       <div>
         <p>this is test of eSport</p>
+        
+       
+
          {
-           myObjStr.map((res)=>{
+        arr.map(item => {
+            return (
+            <div>
+           
+              <ViewMatch mydata={item.value} />
+            </div>
+            )
+          })
+        }
 
-                  <ViewMatch
-
-                        title={res.title} 
-                        myState={res.state}
-                        tournamentName={res.tournamentName}
-                        winner={res.winner}
-                        score={res.score}
-                        team={res.team}
-                        />
-
-           })
-         }
       </div>
     );
   }

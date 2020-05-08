@@ -1,0 +1,19 @@
+table {
+    width: 100%;
+    border: 2px;
+    border-color: blue;
+  }
+  
+  th {
+    height: 50px;
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  tr {
+      width: 100px;
+  }
+
+  th, td {
+    border-bottom: 1px solid #ddd;
+  }

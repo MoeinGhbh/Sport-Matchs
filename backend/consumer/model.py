@@ -163,11 +163,12 @@ class report():
                 txt4 = " \"tournament_name\":\"{tournament_name}\" ,".format(tournament_name=val[2])
                 txt5 = " \"Team\":\"{Team}\" ,".format(Team=val[3])
                 txt6 = " \"winner\":\"{winner}\" ,".format(winner=val[4])
-                txt6 = " \"score\":\"{score}\" ".format(score=val[5])
-                txt = txt1+"{"+txt2+txt3+txt4+txt5+txt6+"}"
+                txt7 = " \"score\":\"{score}\" ".format(score=val[5])
+                txt = txt1+"{"+txt2+txt3+txt4+txt5+txt6+txt7+"}"
                 myText+=txt
 
             
+            # myText="{\"matches\":{"+myText+"}}"
             myText="{"+myText+"}"
             return json.loads(myText)
             

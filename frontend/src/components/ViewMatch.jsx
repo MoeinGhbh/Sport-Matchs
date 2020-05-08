@@ -1,24 +1,76 @@
 import React , { Component } from 'react';
+import "./style.css"
 
 
 class ViewMatch extends Component{
 
     render(){
 
-        const {title,state, team,tournament,winner,score} = this.props
+        const {mydata} = this.props
+        console.log(mydata,'this is my view detailes')
+
+      
+        // console.log(mydata["Team"])
+
         return(
             <div>
-                    <p>
-                        here is component of react
-                    </p>
-                   <div>
-                            <div> {title} </div>
-                            <div> {state} </div>
-                            <div> {team} </div>
-                            <div> {tournament} </div>
-                            <div> {winner} </div>
-                            <div> {score} </div>
-                    </div>
+                   
+
+                    <table className="tbl">
+                        <tr>
+
+                            <td>
+                                      <label>Team:  </label>
+                            </td>
+                            <td>
+                                        <label> {mydata["Team"]} </label>
+                            </td>
+
+                            <td>
+                                      <label>Tttle:  </label>
+                            </td>
+                            <td>
+                                        <label> {mydata["title"]} </label>
+                            </td>
+
+                            <td>
+                                      <label>state:  </label>
+                            </td>
+                            <td>
+                                        <label> {mydata["state"]} </label>
+                            </td>
+
+                            <td>
+                                      <label>tournament_name:  </label>
+                            </td>
+                            <td>
+                                        <label> {mydata["tournament_name"]} </label>
+                            </td>
+
+                            <td>
+                                      <label>winner:  </label>
+                            </td>
+                            <td>
+                                        <label> {mydata["winner"]} </label>
+                            </td>
+
+
+                            <td>
+                                      <label>score:  </label>
+                            </td>
+                            <td>
+                                        <label> {mydata["score"]} </label>
+                            </td>
+
+
+
+
+                        </tr>
+                    </table>
+
+                  
+                    
+                  
             </div>
         );
     }
