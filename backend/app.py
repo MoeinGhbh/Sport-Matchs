@@ -1,8 +1,12 @@
 from consumer.config import app
-from flask import Flask, render_template
-from consumer.model import Team
+from flask import Flask, render_template, jsonify
+from consumer.model import report
+import json
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+
+# app = Flask(__name__)
+
 
 @app.route("/")
 def index():
@@ -11,9 +15,8 @@ def index():
 
 @app.route("/api/v1.0/getData", methods=["GET", "POST"])
 def getData():
-    # Team.Insert
-    data="{'source': 'source1'}"
-    return data
+    res = report.report()
+    return res
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -21,8 +24,7 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    # app.run('127.0.0.1', port=5000, debug=True)
-    app.run(debug=True)
+    app.run('127.0.0.1', port=5000, debug=True)
 
 
 

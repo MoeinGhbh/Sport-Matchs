@@ -33,34 +33,28 @@ class App extends Component{
 
   render(){
     const {data} = this.state;
+    const myObjStr = JSON.parse(data);
 
     console.log(data)
-
+    console.log(myObjStr)
     return(
       <div>
         <p>this is test of eSport</p>
+         {
+           myObjStr.map((res)=>{
 
-              {
-                    data.map((Zone, index) => {
-                        return (
-                          <div>
-                             <ViewMatch data={this.data} />
-                                {/* <ZoneCard
-                                    zoneIndex={index}
-                                    zoneName={Zone.zoneName}
-                                    items={Zone.items}
-                                    handler={handler}
-                                    zoneId={Zone.zoneId}
-                                    className="card"/> */}
-                            
-                        </div>)
-                    })
-                }
+                  <ViewMatch
 
+                        title={res.title} 
+                        myState={res.state}
+                        tournamentName={res.tournamentName}
+                        winner={res.winner}
+                        score={res.score}
+                        team={res.team}
+                        />
 
-
-
-         
+           })
+         }
       </div>
     );
   }

@@ -129,29 +129,48 @@ class Scores(db.Model):
                 return 'error'
 
 
+from sqlalchemy import text
+import random
 
+class report():
 
-    # def json(self):
-    #     return {
-    #                                 'id': self.id, 
-    #                                 'Title': self.Title, 
-    #                                 'Tournament': self.Tournament,
-    #                                 'Team': self.Team,
-    #                                 'Match': self.Match,
-    #                                  'Scores': self.Scores
-    #                                 }
+        @staticmethod
+        def report():
+            SQLCommand="SELECT \
+                                title.title, \
+                                title.state, \
+                                tournament.tournament_name, \
+                                team.Team , \
+                                scores.winner,\
+                                scores.Score \
+                        FROM matches \
+                        inner join team on matches.team1 = team.id OR matches.team2=team.id \
+                        inner join scores on (matches.team1=scores.team_id or matches.team2=scores.team_id) \
+                        inner join tournament on tournament.id = matches.tournament_id \
+                        inner join title on title.id=tournament.id" 
 
-    # def __repr__(self):
-    #     json_matches_table = {
-    #                             'id': self.id, 
-    #                             'Title': self.Title, 
-    #                             'Tournament': self.Tournament,
-    #                             'Team': self.Team,
-    #                             'Match': self.Match,
-    #                             'Scores': self.Scores
-    #     }
-    #     return json.dumps(json_matches_table)
+            sql = text(SQLCommand)
+            cursor = db.engine.execute(sql)
 
+            data = cursor.fetchall()
 
+            myText =''
+            for idx, val in enumerate(data):
+                if myText !='':
+                    myText=myText+","
+                txt1 = " \"{indx}\": ".format(indx=idx+1)
+                txt2 = " \"title\":\"{title}\" ,".format(title=val[0])
+                txt3 = " \"state\":\"{state}\" ,".format(state=val[1])
+                txt4 = " \"tournament_name\":\"{tournament_name}\" ,".format(tournament_name=val[2])
+                txt5 = " \"Team\":\"{Team}\" ,".format(Team=val[3])
+                txt6 = " \"winner\":\"{winner}\" ,".format(winner=val[4])
+                txt6 = " \"score\":\"{score}\" ".format(score=val[5])
+                txt = txt1+"{"+txt2+txt3+txt4+txt5+txt6+"}"
+                myText+=txt
 
-
+            
+            print(myText)
+            myText="{"+myText+"}"
+            return json.dumps(myText)
+            
+           
