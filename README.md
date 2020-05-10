@@ -1,7 +1,5 @@
 # eSport Task
 
----
-
 ## Project Report :
 
 ---
