@@ -1,14 +1,29 @@
-docker-compose up -d rabbitmq
+# eSport Task
 
+### for run RabbitMQ need use docker image:
+
+--- 
+
+docker-compose up -d rabbitmq
 http://localhost:15672 (username,password: guest,guest)
 
-python3 -m venv env
-pip instal pika
-pip install sql_alchemy
-pip install flask
+### Make ready enviroment, includes: install virtaul enviroment and install requierd library
 
+---
 
-# make data base by model
+  * python3 -m venv env
+
+  * pip freeze > requirment.txt
+
+  * pip instal pika
+  * pip install sql_alchemy
+  * pip install flask
+
+### 
+
+---
+
+make dabase from model modul:
 
 ---
 
@@ -17,12 +32,28 @@ pip install flask
   * db.create_all()
 
 
+---
 
-python consumer.py
-python publisher.py
+Run Publisher and consumer
+
+  * cd consumer
+  * python consumer.py
+  * cd publisher
+  * python publisher.py
+
+---
+
+### for run application
+
+--- 
+
+    python aap.py
 
 
-# Intro
+
+
+
+## Require:
 
 JSON formated messages are being published into a RabbitMQ queue (can be done manually on the RabbitMQ management UI).
 Each one of the messages represents detailed information for an eSports event and has a source referenced. Your task is to read them, save them (update if necessary) and provide the information for further use.
