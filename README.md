@@ -7,6 +7,7 @@
 docker-compose up -d rabbitmq
 http://localhost:15672 (username,password: guest,guest)
 
+
 ### Make ready enviroment, includes: install virtaul enviroment and install requierd library
 
 ---
@@ -23,7 +24,7 @@ http://localhost:15672 (username,password: guest,guest)
 
 ---
 
-make dabase from model modul:
+### make dabase from model modul:
 
 ---
 
@@ -32,16 +33,16 @@ make dabase from model modul:
   * db.create_all()
 
 
----
+### Run Publisher and consumer
 
-Run Publisher and consumer
+---
 
   * cd consumer
   * python consumer.py
   * cd publisher
   * python publisher.py
 
----
+
 
 ### for run application
 
