@@ -4,8 +4,8 @@
 
 --- 
 
-docker-compose up -d rabbitmq
-http://localhost:15672 (username,password: guest,guest)
+  * docker-compose up -d rabbitmq
+  * http://localhost:15672 (username,password: guest,guest)
 
 
 ### Make ready enviroment, includes: install virtaul enviroment and install requierd library
