@@ -1,5 +1,17 @@
 # eSport Task
 
+---
+
+## Project Report :
+
+---
+
+at first, the publisher read messages and edit format then send for the rabbitMQ queue.
+second, consumer listens to queue when receive data pars them and save to SQLite.
+I designed and implement normalization relational databases to save data.
+I define a function to read customize data to JSON format for sending with restful API for ReactJS.
+My ReactJS injected to the backend to when build project, send built file to the backend. 
+
 ### for run RabbitMQ need use docker image:
 
 --- 
