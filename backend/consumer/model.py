@@ -3,6 +3,14 @@ from config import app
 import json
 
 
+class titleError(Exception):
+        """ exception of title class """
+
+
+class turnamentError(Exception):
+        """ exception of turnamnet class """
+
+
 db = SQLAlchemy(app)
 
 
@@ -29,7 +37,7 @@ class Title(db.Model):
             try:
                 db.session.add(new_title)
                 db.session.commit()
-                print('add Title')
+                return 'add Title'
             except:
                 return 'error'
 
@@ -51,14 +59,15 @@ class Tournament(db.Model):
         # print('count of tournemants')
         # print(Tournament.query.filter_by(tournament_name=_Tournament).count())
         if (Tournament.query.filter_by(tournament_name=_Tournament).count()==0):
-            Title_id = Title.query.filter_by(title=_title).first().id
-            new_tournaments = Tournament(tournament_name=_Tournament,title_id=Title_id,date_start_text=_date_start_text)
-            try:
-                db.session.add(new_tournaments)
-                res = db.session.commit()
-                print('add Tournament')
-            except:
-                return 'error'
+                print(Title.query.filter_by(title=_title).count())
+                if (Title.query.filter_by(title=_title).count()>0):
+                    Title_id = Title.query.filter_by(title=_title).first().id
+                    new_tournaments = Tournament(tournament_name=_Tournament,title_id=Title_id,date_start_text=_date_start_text)
+                    db.session.add(new_tournaments)
+                    db.session.commit()
+                    return 'add Tournament'
+                else:
+                    raise turnamentError('forign key is not exist')
         else:
             print('tournament is exist')
 
