@@ -10,6 +10,14 @@ class titleError(Exception):
 class turnamentError(Exception):
         """ exception of turnamnet class """
 
+class teamError(Exception):
+        """ exception of team class """
+
+class matchesError(Exception):
+        """ exception of matches class """
+
+class scoresError(Exception):
+        """ exception of scores class """
 
 db = SQLAlchemy(app)
 
@@ -85,7 +93,9 @@ class Team(db.Model):
                 db.session.commit()
                 print('add Team')
             except:
-                return 'error'
+                raise teamError('team is exist')
+        else:
+            raise teamError('team is exist')
 
 class Matches(db.Model):
     __tableName__ = "matches"
@@ -99,15 +109,20 @@ class Matches(db.Model):
     def Insert(_Tournament,_Team1,_Team2):
         _Tournament = _Tournament.strip()
         _Tournament=_Tournament.lower()
-        _Tournament_id =  Tournament.query.filter_by(tournament_name=_Tournament).first().id
-        if (Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).count()==0):
-            new_matches = Matches(team1=_Team1,team2=_Team2,tournament_id=_Tournament_id)
-            try:
-                db.session.add(new_matches)
-                db.session.commit()
-                print('add Matches')
-            except:
-                return 'error'
+        if (Tournament.query.filter_by(tournament_name=_Tournament).count()==1):
+            _Tournament_id =  Tournament.query.filter_by(tournament_name=_Tournament).first().id
+            if (Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).count()==0):
+                new_matches = Matches(team1=_Team1,team2=_Team2,tournament_id=_Tournament_id)
+                try:
+                    db.session.add(new_matches)
+                    db.session.commit()
+                    print('add Matches')
+                except:
+                    return 'error'
+            else:
+                raise matchesError('matche is exist')
+        else:
+            raise matchesError('Turnament is not define')
 
 class Scores(db.Model):
     __tableName__ = "scores"
@@ -122,20 +137,22 @@ class Scores(db.Model):
     def Insert(_Tournament, _Team,_Score,_winner,_Team1,_Team2):
         _Tournament = _Tournament.strip()
         _Tournament=_Tournament.lower()
-        _Tournament_id =  Tournament.query.filter_by(tournament_name=_Tournament).first().id
-        
-        _Matched_id = Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).first().id
-
-
-
-        if (Scores.query.filter_by(matche_id=_Matched_id).filter_by(team_id=_Team).count()==0):
-            new_score = Scores(team_id=_Team,matche_id=_Matched_id,Score=_Score,winner=_winner)
-            try:
-                db.session.add(new_score)
-                db.session.commit()
-                print('add Score')
-            except:
-                return 'error'
+        if (Tournament.query.filter_by(tournament_name=_Tournament).count()>0):
+            _Tournament_id =  Tournament.query.filter_by(tournament_name=_Tournament).first().id
+            if (Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).count>0):
+                _Matched_id = Matches.query.filter_by(tournament_id=_Tournament_id).filter_by(team1=_Team1).filter_by(team2=_Team2).first().id
+                if (Scores.query.filter_by(matche_id=_Matched_id).filter_by(team_id=_Team).count()==0):
+                    new_score = Scores(team_id=_Team,matche_id=_Matched_id,Score=_Score,winner=_winner)
+                    try:
+                        db.session.add(new_score)
+                        db.session.commit()
+                        print('add Score')
+                    except:
+                        return 'error'
+            else:
+                raise scoresError('matches is not exist')
+        else:
+            raise scoresError('turnament is not exist')
 
 
 from sqlalchemy import text

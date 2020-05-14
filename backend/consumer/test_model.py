@@ -1,7 +1,8 @@
 import unittest
-from model import Team,Matches,Tournament,Scores,Title, turnamentError
+from model import Team,Matches,Tournament,Scores,Title, turnamentError, teamError,matchesError,scoresError
 import random, string
 import pytest
+from sqlalchemy import text
 
 
 def make_suite():
@@ -28,13 +29,20 @@ def make_suite():
             print(str(context.value))
 
         def test_Team(self):
-            assert 1==1
+            with pytest.raises(teamError) as context:
+                result =  Team.Insert(1,"Team-Socer")
+            print(str(context.value))
+
 
         def test_matches(self):
-            assert 1==1
+            with pytest.raises(matchesError) as context:
+                result = Matches.Insert("new-match",1,1)
+            print(str(context.value))
         
         def test_score(self):
-            assert 1==1
+            with pytest.raises(scoresError) as context:
+                result = Scores.Insert("turnamnet","team1","1","true","team1","team2")
+            print(str(context.value))
 
 
 
@@ -44,6 +52,8 @@ def make_suite():
     suite.addTest(sport_test('test_title'))
     suite.addTest(sport_test('test_Tournement'))
     suite.addTest(sport_test('test_Team'))
+    suite.addTest(sport_test('test_matches'))
+    suite.addTest(sport_test('test_score'))
     return suite
 
 
