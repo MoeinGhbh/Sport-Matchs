@@ -167,7 +167,7 @@ class report():
                     'state':row['state'],
                     'tournament_name':row['tournament_name'],
                     'winner':row['winner'],
-                    'Score':row['Score'],
+                    'score':row['Score'],
                     'Team':row['Team']
                 }
 
@@ -197,9 +197,25 @@ class report():
                 i+=1
                 tmp.update({i: report.myjosn(row)})
 
+            # return json.dumps([{str(idx+1):report.myjosn(row)} for idx,row in enumerate(cursor)])
+
             return tmp
 
 
          
             
-           
+              # myText =''
+            # for idx, val in enumerate(cursor):
+            #     if myText !='':
+            #         myText=myText+","
+            #     txt1 = " \"{indx}\": ".format(indx=idx+1)
+            #     txt2 = " \"title\":\"{title}\" ,".format(title=val[0])
+            #     txt3 = " \"state\":\"{state}\" ,".format(state=val[1])
+            #     txt4 = " \"tournament_name\":\"{tournament_name}\" ,".format(tournament_name=val[2])
+            #     txt5 = " \"Team\":\"{Team}\" ,".format(Team=val[3])
+            #     txt6 = " \"winner\":\"{winner}\" ,".format(winner=val[4])
+            #     txt7 = " \"score\":\"{score}\" ".format(score=val[5])
+            #     txt = txt1+"{"+txt2+txt3+txt4+txt5+txt6+txt7+"}"
+            #     myText+=txt
+            # myText="{"+myText+"}"
+            # return json.loads(myText)
