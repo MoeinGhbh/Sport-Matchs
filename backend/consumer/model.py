@@ -34,8 +34,8 @@ class Title(db.Model):
     title = db.Column(db.String(120), nullable=False)
     state = db.Column(db.Integer,nullable=False)
 
-    @staticmethod
-    def Insert(_Title,_state):
+    
+    def Insert(self,_Title,_state):
         _Title = _Title.strip()
         _Title = _Title.lower()
         # print(_Title)
@@ -58,8 +58,8 @@ class Tournament(db.Model):
     title = db.relationship('Title', backref='tournament', lazy=True)
     title_id = db.Column(db.Integer, db.ForeignKey('title.id'))
 
-    @staticmethod
-    def Insert(_Tournament,_title,_date_start_text):
+    
+    def Insert(self,_Tournament,_title,_date_start_text):
         _Tournament=_Tournament.strip()
         _Tournament=_Tournament.lower()
         _title=_title.strip()
@@ -84,8 +84,8 @@ class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     Team = db.Column(db.String(120), nullable=False)
 
-    @staticmethod
-    def Insert(_Team_id,_Team):
+    
+    def Insert(self,_Team_id,_Team):
         if (Team.query.filter_by(id=_Team_id).count()==0):
             new_team = Team(id=_Team_id,Team=_Team)
             try:
@@ -93,9 +93,9 @@ class Team(db.Model):
                 db.session.commit()
                 print('add Team')
             except:
-                raise teamError('team is exist')
+                return teamError('team is exist')
         else:
-            raise teamError('team is exist')
+            return teamError('team is exist')
 
 class Matches(db.Model):
     __tableName__ = "matches"
@@ -105,8 +105,8 @@ class Matches(db.Model):
     team2 =      db.Column(db.Integer, db.ForeignKey('team.id'), unique=False, nullable=False)
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.id'), unique=False, nullable=False)
 
-    @staticmethod
-    def Insert(_Tournament,_Team1,_Team2):
+    
+    def Insert(self,_Tournament,_Team1,_Team2):
         _Tournament = _Tournament.strip()
         _Tournament=_Tournament.lower()
         if (Tournament.query.filter_by(tournament_name=_Tournament).count()==1):
@@ -120,9 +120,9 @@ class Matches(db.Model):
                 except:
                     return 'error'
             else:
-                raise matchesError('matche is exist')
+                return matchesError('matche is exist')
         else:
-            raise matchesError('Turnament is not define')
+            return matchesError('Turnament is not define')
 
 class Scores(db.Model):
     __tableName__ = "scores"
@@ -133,8 +133,8 @@ class Scores(db.Model):
     winner = db.Column(db.Integer, nullable=True)
     Score = db.Column(db.Integer, nullable=True)
 
-    @staticmethod
-    def Insert(_Tournament, _Team,_Score,_winner,_Team1,_Team2):
+    
+    def Insert(self,_Tournament, _Team,_Score,_winner,_Team1,_Team2):
         _Tournament = _Tournament.strip()
         _Tournament=_Tournament.lower()
         if (Tournament.query.filter_by(tournament_name=_Tournament).count()>0):
@@ -160,8 +160,7 @@ import random
 
 class report():
 
-        @staticmethod
-        def myjosn(row):
+        def myjosn(self,row):
                 return {
                     'title':row['title'],
                     'state':row['state'],
@@ -171,8 +170,8 @@ class report():
                     'Team':row['Team']
                 }
 
-        @staticmethod
-        def report():
+        
+        def report(self):
             SQLCommand="SELECT \
                                 title.title, \
                                 title.state, \
